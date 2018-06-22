@@ -1,15 +1,17 @@
 %% Filter signal
-cd('C:\Users\Ayanohikaru\Desktop\a\Numeric');
+cd('E:\Thesis\Firmware\Data\Signal');
 extract = dir();
 extract = {extract.name}';
 extract = extract(3:end);
 for i_i = 1:length(extract)
     clearvars RR_NM RR_MM RR_AS asth_locNM asth_locMM asth_locAS
-    cd('C:\Users\Ayanohikaru\Desktop\a\Numeric');
+    cd('E:\Thesis\Firmware\Data\Signal');
     name = extract{i_i};
     load(name);
-    name = name(1:end-6);
+    name = name(1:end-4);
     name_mat = strcat(name,'.mat');
+    sig_length = size(n_SpO2,2)*7500;
+    n_ECG = n_ECG(1:sig_length);
     % n_PULSE = n_PULSE(1200:end);
     % n_RESP = n_RESP(1200:end);
     % n_SpO2 = n_SpO2(1200:end);
@@ -42,17 +44,17 @@ for i_i = 1:length(extract)
     ecg_locAS = n_rsECG;
     ecg_locAS(remove_AS,:) = [];
     %% HRV extraction
-    cd('C:\Users\Ayanohikaru\Desktop\a\EXA');
+    cd('E:\Thesis\Firmware\Data\Window_Exa');
     addpath('E:\Enlin\Thesis CD\Codes\ECG detection')
     for i = 1:size(ecg_locNM,1)
-        cd('C:\Users\Ayanohikaru\Desktop\a\EXA\Normal');
+        cd('E:\Thesis\Firmware\Data\Window_Exa\Normal');
         clearvars ERR
         textNameNM = strcat(name,'_','NM_W',num2str(i));
         m_IIs = ecg_locNM(i,:);
         m_fs = 125;
         m_t0s=[0.008:0.008:60];% 1 minute
         try
-            [~,ECG_loc] = ECGpeak(m_t0s,m_IIs,m_fs,1,length(m_IIs));
+            [~,ECG_loc] = ECGpeak(m_t0s,m_IIs,m_fs,1,	(m_IIs));
         catch
             %disp(strcat(name,'_',num2str(i)));
         end
@@ -67,7 +69,7 @@ for i_i = 1:length(extract)
         %ECG_loc(ECG_loc==0)=[];
     end
     for i = 1:size(ecg_locMM,1)
-        cd('C:\Users\Ayanohikaru\Desktop\a\EXA\Mild');
+        cd('E:\Thesis\Firmware\Data\Window_Exa\Mild');
         clearvars ERR
         textNameMM = strcat(name,'_','MM_W',num2str(i));
         m_IIs = ecg_locMM(i,:);
@@ -89,7 +91,7 @@ for i_i = 1:length(extract)
         end
     end
     for i = 1:size(ecg_locAS,1)
-        cd('C:\Users\Ayanohikaru\Desktop\a\EXA\Severe');
+        cd('E:\Thesis\Firmware\Data\Window_Exa\Severe');
         clearvars ERR
         textNameAS = strcat(name,'_','AS_W',num2str(i));
         m_IIs = ecg_locAS(i,:);
@@ -112,7 +114,7 @@ for i_i = 1:length(extract)
 %% Save result
 %% save workspace
 try
-    cd('C:\Users\Ayanohikaru\Desktop\a\EXA');
+    cd('E:\Thesis\Firmware\Data\Window_Exa');
     save(name_mat,'RR_NM','RR_MM','RR_AS');
 catch
     disp(name);
