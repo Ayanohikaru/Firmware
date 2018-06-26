@@ -5,8 +5,7 @@ addpath('E:\Thesis\Firmware');
 extract = dir('*nm.mat');
 extract = {extract.name}';
 %%
-%for i_i = 1:length(extract)
-i_i = 1;
+for i_i = 1:length(extract)
 name = extract{i_i};
 name = name(1:end-6);
 name_save = strcat(name,'.mat');
@@ -22,14 +21,14 @@ run('convertTime');
 cd('E:\Thesis\Firmware\Data\Signal')
 try
     cd('E:\Thesis\Firmware\Data\Signal');
-    if (isempty(n_PPG)==0)| (isempty(n_RESP)==0)
-        save(name_save,'n_fs','n_PULSE','n_RESP','n_SpO2','m_ECG','m_PPG','m_RESP');
-    else
-        save(name_save,'n_fs','n_PULSE','n_RESP','n_SpO2','m_ECG');
-    end
+%     if (isempty(n_PPG)==0)&& (isempty(n_RESP)==0)
+         save(name_save,'n_fs','n_PULSE','n_RESP','n_SpO2','m_ECG','m_PPG','m_RESP');
+%     else
+%         save(name_save,'n_fs','n_PULSE','n_RESP','n_SpO2','m_ECG');
+%     end
 catch
     disp(name);
 end
-%end
+end
 
 

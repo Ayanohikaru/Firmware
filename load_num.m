@@ -13,15 +13,21 @@ load(mat_num); val_numeric = val;
 cd(Folder_header);
 name_info = strcat(name,'nm.hea');
 n_heaFid = fopen(name_info, 'rt');
-n_header = textscan(fgetl(n_heaFid), '%s %f %f %d %s %s','Delimiter',' ');  %get first line from header
-n_starttime = n_header{6};
-n_starttime = n_starttime{1};
+n_header = textscan(fgetl(n_heaFid), '%s %f %s %d %s %s','Delimiter',' ');  %get first line from header
+% n_starttime = n_header{6};
+% n_starttime = n_starttime{1};
 n_fs = n_header{3};
+n_fs = str2num(n_fs{1});
 fclose(n_heaFid);
 %% Load info
+cd(Folder_header);
 name_info = strcat(name,'nm.info');
 n_infoFid = fopen(name_info, 'rt');
-fgetl(n_infoFid); fgetl(n_infoFid); %skip 3 line of info file
+[n_starttime] = textscan(fgetl(n_infoFid), '%s %s %s %s','Delimiter','[');
+n_starttime = strcat('[',n_starttime{2});
+n_starttime = n_starttime{1};
+n_starttime = n_starttime(2:9);
+fgetl(n_infoFid); %skip 3 line of info file
 fgetl(n_infoFid);
 fgetl(n_infoFid);
 fgetl(n_infoFid); %skip signal header string
