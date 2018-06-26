@@ -11,15 +11,21 @@ name = extract{i_i};
 name = name(1:end-6);
 name_save = strcat(name,'.mat');
 %% Load data nummeric
-run(load_num);
-run(load_ECG);
+[m_RESP,m_PPG,m_ECG,m_starttime] = load_ECG(name);
+[n_fs,n_SpO2,n_PULSE,n_RESP,n_starttime] = load_num(name);
+%% Compare time start and scale signal
+% data in m file is 125 sample/second
+% data in n file is 1 sample/minute
+addpath('E:\Thesis\Firmware');
+run('convertTime');
 %% save workspace
+cd('E:\Thesis\Firmware\Data\Signal')
 try
     cd('E:\Thesis\Firmware\Data\Signal');
-    if (exist('n_PPG','var')==1)
-        save(name_save,'n_PULSE','n_RESP','n_SpO2','n_ECG','n_PPG');
+    if (isempty(n_PPG)==0)| (isempty(n_RESP)==0)
+        save(name_save,'n_fs','n_PULSE','n_RESP','n_SpO2','m_ECG','m_PPG','m_RESP');
     else
-        save(name_save,'n_PULSE','n_RESP','n_SpO2','n_ECG');
+        save(name_save,'n_fs','n_PULSE','n_RESP','n_SpO2','m_ECG');
     end
 catch
     disp(name);

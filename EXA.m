@@ -10,12 +10,7 @@ for i_i = 1:length(extract)
     load(name);
     name = name(1:end-4);
     name_mat = strcat(name,'.mat');
-    sig_length = size(n_SpO2,2)*7500;
-    n_ECG = n_ECG(1:sig_length);
-    % n_PULSE = n_PULSE(1200:end);
-    % n_RESP = n_RESP(1200:end);
-    % n_SpO2 = n_SpO2(1200:end);
-    % signal = signal - base/gain : n_val(i, :) = (n_val(i, :) - n_base(i)) / n_gain(i);
+   
     bs_PULSE = find(n_PULSE<10);
     bs_RESP = find(n_RESP<2);
     bs_SpO2 = find(n_SpO2<10);

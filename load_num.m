@@ -1,21 +1,25 @@
-function [n_SpO2,n_PULSE,n_RESP] = load_num(name)
+function [n_fs,n_SpO2,n_PULSE,n_RESP,n_starttime] = load_num(name)
 %% Setup
 Folder = 'E:\Thesis\Firmware\Data\Mat_num';
+Folder_header = 'E:\MIMIC II WAVEFORM DATABASE\RAW MIMIC II DATABASE\PRE_GENERATED RECORD';
 cd(Folder);
 
 % Name of record - Load data
+val_numeric = [];
 mat_num = strcat(name,'nm.mat');
-load(name_mat,'val_numeric');
+load(mat_num); val_numeric = val;
 
 %% Load header
+cd(Folder_header);
 name_info = strcat(name,'nm.hea');
-m_heaFid = fopen(name_info, 'rt');
-m_header = textscan(fgetl(m_heaFid), '%s %f %f %d %s %s','Delimiter',' ');  %get first line from header
-m_starttime = m_header{6};
-m_starttime = m_starttime{1};
+n_heaFid = fopen(name_info, 'rt');
+n_header = textscan(fgetl(n_heaFid), '%s %f %f %d %s %s','Delimiter',' ');  %get first line from header
+n_starttime = n_header{6};
+n_starttime = n_starttime{1};
+n_fs = n_header{3};
 for n = 1:size(val_numeric,1)
-    m_signal = textscan(fgetl(m_heaFid), '%s %s %s %d %d %d %d %d %s','Delimiter',' ');
-    n_sigCheck = m_signal{9};
+    n_signal = textscan(fgetl(n_heaFid), '%s %s %s %d %d %d %d %d %s','Delimiter',' ');
+    n_sigCheck = n_signal{9};
     n_sigCheck = n_sigCheck{1};
     switch n_sigCheck
         case 'SpO2'
@@ -41,6 +45,5 @@ for n = 1:size(val_numeric,1)
     end
 end
 fclose('all');
-%% Scale timeline
-n_starttime =
+%mSecStart = datestr(datenum(n_starttime),'DD:HH:MM:SS');
 end
