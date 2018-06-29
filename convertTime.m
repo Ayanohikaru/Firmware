@@ -24,8 +24,10 @@ else %file numberic tr? h?n
     end
 end
 %% recheck the number of sample
-number_samp = size(n_SpO2,2)*round(1/n_fs)*125;
-if size(m_ECG,2)>number_samp
+%s? sample * s? giây/sample (Hz) = th?i gian (s)
+number_time = round(size(n_SpO2,2)*(1/n_fs)/60)-1; 
+number_samp = number_time*7500;
+if size(m_ECG,2)>= number_samp
    m_ECG = m_ECG(1:number_samp);
    if isempty(m_PPG) == 0
        m_PPG = m_PPG(1:number_samp);
@@ -33,8 +35,8 @@ if size(m_ECG,2)>number_samp
    if isempty(m_RESP) == 0
        m_RESP = m_RESP(1:number_samp);
    end
-else
-   ECG_length = (round(size(m_ECG,2)/125)-1)*125;
+else %ECG ng?n h?n
+   ECG_length = (round(size(m_ECG,2)/7500)-1)*7500;
    m_ECG = m_ECG(1:ECG_length);
    if isempty(m_PPG) == 0
        m_PPG = m_PPG(1:ECG_length);

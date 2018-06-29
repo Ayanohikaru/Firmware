@@ -1,4 +1,4 @@
-%clear all;clc;
+    %clear all;clc;
 Folder = 'E:\Thesis\Firmware\Data\Mat_num';
 cd(Folder);
 addpath('E:\Thesis\Firmware');
@@ -10,6 +10,7 @@ name = extract{i_i};
 name = name(1:end-6);
 name_save = strcat(name,'.mat');
 %% Load data nummeric
+try
 [m_RESP,m_PPG,m_ECG,m_starttime] = load_ECG(name);
 [n_fs,n_SpO2,n_PULSE,n_RESP,n_starttime] = load_num(name);
 %% Compare time start and scale signal
@@ -27,7 +28,10 @@ try
 %         save(name_save,'n_fs','n_PULSE','n_RESP','n_SpO2','m_ECG');
 %     end
 catch
-    disp(name);
+    disp(strcat('unsave: ',name));
+end
+catch
+    disp(strcat('unload: ',name));
 end
 end
 

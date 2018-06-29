@@ -3,6 +3,7 @@ function [m_RESP,m_PPG,m_ECG,m_starttime] = load_ECG(name)
 Folder_edf = 'E:\Thesis\Firmware\Data\EDF';
 Folder_mat = 'E:\Thesis\Firmware\Data\Mat_ecg';
 Folder_header = 'E:\MIMIC II WAVEFORM DATABASE\RAW MIMIC II DATABASE\PRE_GENERATED RECORD';
+addpath('E:\Thesis\Firmware');
 cd(Folder_edf);
 % Name of record - Load data
 name_mat = strcat(name,'m.mat');

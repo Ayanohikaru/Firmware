@@ -208,7 +208,7 @@ hdr.label = hdr.label(targetSignals);
 hdr.label = regexprep(hdr.label,'\W','');
 hdr.units = regexprep(hdr.units,'\W','');
 hdr.frequency = hdr.samples./hdr.duration;
-disp('Step 1 of 2: Reading requested records. (This may take a few minutes.)...');
+%disp('Step 1 of 2: Reading requested records. (This may take a few minutes.)...');
 if nargout > 1 || assignToVariables
     % Scale data (linear scaling)
     scalefac = (hdr.physicalMax - hdr.physicalMin)./(hdr.digitalMax - hdr.digitalMin);
@@ -242,7 +242,7 @@ if nargout > 1 || assignToVariables
     
     % Sort by requested targetSignals order:
     
-    disp('Step 2 of 2: Parsing data...');
+    %disp('Step 2 of 2: Parsing data...');
     recnum = 1;
     for ii = 1:hdr.ns
         if ismember(ii,targetSignals)

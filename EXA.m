@@ -1,20 +1,21 @@
-%% Filter signal
-% cd('E:\Thesis\Firmware\Data\Signal');
-% extract = dir();
-% extract = {extract.name}';
-% extract = extract(3:end);
-% %for i_i = 1:length(extract)
-%     clearvars RR_NM RR_MM RR_AS asth_locNM asth_locMM asth_locAS
-%     cd('E:\Thesis\Firmware\Data\Signal');
-%     name = extract{i_i};
-%     load(name);
-%     name = name(1:end-4);
-%     name_mat = strcat(name,'.mat');
-
-%% Seperate ECG
-n_win = 125*(1/n_fs);
-n_rsECG = reshape(m_ECG,n_win,[])';
-
+% Filter signal
+cd('E:\Thesis\Firmware\Data\Signal');
+addpath('E:\Thesis\Firmware\');
+extract = dir();
+extract = {extract.name}';
+extract = extract(3:end);
+for i_i = 1:length(extract)
+    clearvars RR_NM RR_MM RR_AS asth_locNM asth_locMM asth_locAS
+    cd('E:\Thesis\Firmware\Data\Signal');
+    name = extract{i_i};
+    load(name);
+    name = name(1:end-4);
+    name_mat = strcat(name,'.mat');
+%% Chia window
+% Number of sample in a window of 1 min of numeric file
+num_samp_1min = 60/(1/n_fs);
+    %% Seperate ECG
+n_rsECG = reshape(m_ECG,7500,[])';
 %% Remove lost signal
 nan_PULSE = isnan(n_PULSE);
 nan_RESP = isnan(n_RESP);
@@ -61,7 +62,7 @@ for i = 1:size(ecg_locNM,1)
     m_fs = 125;
     m_t0s=[0.008:0.008:60];% 1 minute
     try
-        [~,ECG_loc] = ECGpeak(m_t0s,m_IIs,m_fs,1,	(m_IIs));
+          [~,ECG_loc] = ECGpeak(m_t0s,m_IIs,m_fs,1,length(m_IIs));
     catch
         %disp(strcat(name,'_',num2str(i)));
     end
@@ -83,12 +84,13 @@ for i = 1:size(ecg_locMM,1)
     m_fs = 125;
     m_t0s=[0.008:0.008:60];% 1 minute
     try
-        [~,ECG_loc] = ECGpeak(m_t0s,m_IIs,m_fs,1,length(m_IIs));
+        [time_loc,R_loc,R_value] = ECG_detection(m_fs,m_IIs,m_t0s);
+        close all;
     catch
         %disp(strcat(name,'_',num2str(i)));
     end
-    EpeakTime = [];
-    EpeakTime = m_t0s(ECG_loc);    %convert R location to actual time in seconds
+     EpeakTime = [];
+    EpeakTime = time_loc;    %convert R location to actual time in seconds
     ERR = diff(EpeakTime);
     ERR = ERR(2:end);
     %RR_MM(i,:) = ERR;
@@ -120,10 +122,10 @@ for i = 1:size(ecg_locAS,1)
 end
 %% Save result
 %% save workspace
-try
+% try
     cd('E:\Thesis\Firmware\Data\Window_Exa');
     save(name_mat,'RR_NM','RR_MM','RR_AS');
-catch
-    disp(name);
+% catch
+%     disp(name);
+% end
 end
-%end
