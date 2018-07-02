@@ -29,16 +29,11 @@ for i_i = 1:length(extract)
     
     %% EXA
     %% Mild/moderate : pulse [100-120], O2 [90-95]
-%     asth_locNM = find((n_SpO2 >=95 & n_RESP < 21));
-%     asth_locMM = find((n_SpO2 >=90 & n_SpO2 <=95 & n_RESP > 20 & n_RESP < 30 & n_PULSE <120 & n_PULSE >100));
-%     % severe : pulse [100-120], O2 [90-95]
-%     asth_locAS = find((n_SpO2 <90 & n_RESP > 30 & n_PULSE >= 120));
-     asth_locNM = find((n_SpO2 >=95 & n_PULSE <110));
-%ACUTE SEVERE
-%MILD/ MODERATE
-        asth_locMM = find((n_SpO2 >=92 & n_SpO2 <=95 & n_RESP > 20 & n_RESP <=25 & n_PULSE <110));
-%ACUTE SEVERE
-        asth_locAS = find((n_SpO2 >=92 & n_SpO2 <=95 & n_RESP > 25 & n_PULSE >= 110));
+    asth_locNM = find((n_SpO2 >=95 & n_RESP < 21));
+    asth_locMM = find((n_SpO2 >=90 & n_SpO2 <=95 & n_RESP > 20 & n_RESP < 30 & n_PULSE <120 & n_PULSE >100));
+    % severe : pulse [100-120], O2 [90-95]
+    asth_locAS = find((n_SpO2 <90 & n_RESP > 30 & n_PULSE >= 120));
+    
     %% Sample with numeric signal larger than windown
     asth_locAS = unique(round(asth_locAS./num_samp_1min));
     asth_locNM = unique(round(asth_locNM./num_samp_1min));
@@ -68,7 +63,7 @@ for i_i = 1:length(extract)
         try
             [time_loc,ECG_loc,R_value] = ECG_detection(m_fs,m_IIs,m_t0s);
         catch
-           disp(strcat(name,'_',num2str(i)));
+            disp(strcat(name,'_',num2str(i)));
         end
         EpeakTime = [];
         EpeakTime = m_t0s(ECG_loc);    %convert R location to actual time in seconds
